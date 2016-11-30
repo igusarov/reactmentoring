@@ -1,0 +1,18 @@
+.Search {
+  height: 100%;
+}
+
+.Search__form {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.Search__input-query {
+  width: 100%;
+}
+
+.Search__label-show-down {
+  white-space: nowrap;
+  margin-right: 5px;
+}

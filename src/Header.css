@@ -1,0 +1,42 @@
+.Header {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Header__row {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Header__action-name {
+  font-size: 30px;
+}
+
+.Header__action-name {
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+}
+
+.Header__search {
+  width: 350px;
+}
+
+.Header__progress {
+  width: 100%;
+  height: 15px;
+}
+
+.Header__add-item {
+}
+
+.Header__add-item--left {
+  width: 200px;
+}
+
+.Header__add-item--right {
+  width: 300px;
+}

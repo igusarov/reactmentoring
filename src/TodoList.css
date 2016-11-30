@@ -1,0 +1,9 @@
+.TodoList {
+}
+
+.TodoList__item {
+  border: 1px solid grey;
+  height: 60px;
+  margin-bottom: 4px;
+  padding: 10px 15px;
+}

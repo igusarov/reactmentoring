@@ -1,0 +1,11 @@
+.AddItem__form {
+  display: flex;
+}
+
+.AddItem__input {
+  width: 100%;
+}
+
+.AddItem__button {
+  width: 40px;
+}

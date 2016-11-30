@@ -1,0 +1,22 @@
+.TodoItemEditor {
+  height: 100%;
+}
+
+.TodoItemEditor__buttons {
+  float: right;
+}
+
+.TodoItemEditor__name {
+  margin-top: 40px;
+}
+
+.TodoItemEditor__done-tick {
+  display: block;
+  margin-top: 20px;
+}
+
+.TodoItemEditor__description {
+  margin-top: 20px;
+  width: 100%;
+  height: 300px;
+}

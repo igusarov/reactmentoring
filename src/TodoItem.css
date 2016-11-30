@@ -1,0 +1,29 @@
+.TodoItem{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.TodoItem__col {
+  display: flex;
+  align-items: center;
+}
+
+.TodoItem__name {
+  padding-left: 20px;
+  font-size: 25px;
+}
+
+.TodoItem__button {
+  cursor: pointer;
+}
+
+.TodoItem__button::before  {
+  font-family: fontawesome;
+  font-size: 20px;
+}
+
+.TodoItem__button--edit::before  {
+  content: "\f044";
+}

@@ -1,0 +1,17 @@
+.App {
+  height: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.App__header {
+  height: 180px;
+  width: 100%;
+}
+
+.App__content {
+  position: relative;
+  flex-grow: 1;
+}

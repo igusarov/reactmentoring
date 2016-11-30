@@ -1,0 +1,39 @@
+.CategoryItem {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.CategoryItem__col {
+  display: flex;
+  align-items: center;
+}
+
+.CategoryItem__name {
+  margin-right: 2px;
+}
+
+.CategoryItem__button {
+  display: inline-block;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.CategoryItem__button::before {
+  font-family: fontawesome;
+  font-size: 20px;
+}
+
+.CategoryItem__button--edit::before{
+  content: "\f044";
+}
+
+.CategoryItem__button--delete::before{
+  content: "\f014";
+}
+
+.CategoryItem__button--add::before{
+  content: "\f196";
+}
