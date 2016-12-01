@@ -3,17 +3,35 @@ import Header from './Header';
 import Content from './Content';
 import './App.css';
 
-const SHOW_TODO_EDITOR = false;
-
 class App extends Component {
+
+  constructor(){
+    super();
+    this.state = {
+      categories : []
+    };
+
+    this.addCategory = this.addCategory.bind(this);
+  }
+
+  addCategory(name) {
+    this.state.categories.push(name);
+    this.setState({categories: this.state.categories})
+  }
+
   render() {
     return (
       <div className="App">
         <div className="App__header">
-          <Header/>
+          <Header
+            onAddCategory={this.addCategory}
+          />
         </div>
         <div className="App__content">
-          <Content editor={SHOW_TODO_EDITOR}/>
+          <Content
+            editor={false}
+            categories={this.state.categories}
+          />
         </div>
       </div>
     );

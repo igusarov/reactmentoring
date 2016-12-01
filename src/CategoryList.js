@@ -6,8 +6,7 @@ class CategoryList extends Component {
   render() {
     return (
       <ul className="CategoryList">
-        {this.props.items.parent.map(()=><li className="CategoryList__item"><CategoryItem/></li>)}
-        {this.props.items.chiled ? <li className="CategoryList__subcategory"><CategoryList items={{parent : this.props.items.chiled}}/></li> : null}
+        {this.props.items.map((item)=><li className="CategoryList__item"><CategoryItem item={item}/></li>)}
       </ul>
     );
   }

@@ -6,7 +6,7 @@ class App extends Component {
     return (
       <div className="CategoryItem">
         <div className="CategoryItem__col">
-          <div className="CategoryItem__name">Category 1</div>
+          <div className="CategoryItem__name">{this.props.item}</div>
           <div className="CategoryItem__button CategoryItem__button--edit"></div>
         </div>
         <div className="CategoryItem__col CategoryItem__col">
