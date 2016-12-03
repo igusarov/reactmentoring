@@ -12,7 +12,7 @@
 }
 
 .CategoryItem__name {
-  margin-right: 2px;
+  margin-left: 5px;
 }
 
 .CategoryItem__button {
@@ -36,4 +36,16 @@
 
 .CategoryItem__button--add::before{
   content: "\f196";
+}
+
+.CategoryItem__button--expand::before{
+  content: "\f0da";
+}
+
+.CategoryItem__button--collapse::before{
+  content: "\f0d7";
+}
+
+.CategoryItem__button--save::before{
+  content: "\f0c7";
 }

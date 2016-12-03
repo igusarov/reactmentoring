@@ -1,8 +1,12 @@
 .CategoryList {
 }
 
-.CategoryList__subcategory {
+.CategoryList__item-subcategory {
   margin-left: 20px;
+}
+
+.CategoryList__item-wrap {
+
 }
 
 .CategoryList__item {
