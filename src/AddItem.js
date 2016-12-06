@@ -5,10 +5,9 @@ class AddItem extends Component {
 
   constructor(){
     super();
-    this.handleAddClick = this.handleAddClick.bind(this);
   }
 
-  handleAddClick(){
+  onAddClick(){
     if (this.refs.input.value) {
       this.props.onAdd(this.refs.input.value);
       this.refs.input.value = '';
@@ -20,7 +19,7 @@ class AddItem extends Component {
       <div className="AddItem">
         <form className="AddItem__form">
           <input type="text" className="AddItem__input" ref="input"/>
-          <input type="button" className="AddItem__button" value="Add" onClick={this.handleAddClick}/>
+          <input type="button" className="AddItem__button" value="Add" onClick={this.onAddClick.bind(this)}/>
         </form>
       </div>
     );

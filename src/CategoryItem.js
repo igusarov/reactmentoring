@@ -10,8 +10,12 @@ class CategoryItem extends Component {
     this.state = {edit : false};
   }
 
-  onEdit() {
-    this.setState({edit : true});
+  onEdit(event) {
+    this.props.onEdit.call(this, event, this.props.item);
+  }
+
+  onAdd(event) {
+    this.props.onAdd.call(this, event, this.props.item);
   }
 
   onSave() {
@@ -60,7 +64,7 @@ class CategoryItem extends Component {
                onClick={this.props.onDeleteCategory.bind(null, this.props.item, this.props.parent)}>
           </div>
           <div className="CategoryItem__button CategoryItem__button--add"
-               onClick={this.props.onAddSubCategory.bind(null, 'new category', this.props.item)}>
+               onClick={this.onAdd.bind(this)}>
           </div>
         </div>
       </div>

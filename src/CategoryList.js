@@ -11,14 +11,6 @@ class CategoryList extends Component {
     };
   }
 
-  onAddSubCategory() {
-    let item = arguments[1];
-    this.props.onAddSubCategory.apply(null, arguments);
-    if (!this.itemIsExpanded(item)) {
-      this.expandItem(item);
-    }
-  }
-
   expandItem(item){
     let expandedItems = this.state.expandedItems;
     expandedItems.push(item);
@@ -57,9 +49,10 @@ class CategoryList extends Component {
                 parent={this.props.parent}
                 item={item}
                 expanded={this.itemIsExpanded(item)}
-                onAddSubCategory={this.onAddSubCategory.bind(this)}
+                onAdd={this.props.onAddCategory}
                 onDeleteCategory={this.props.onDeleteCategory}
                 onExpandCollapse={this.onExpandCollapse.bind(this)}
+                onEdit={this.props.onEditCategory}
                 onSave={this.props.onSaveCategory}
               />
             </div>
@@ -68,9 +61,10 @@ class CategoryList extends Component {
                 <CategoryList
                   parent={item}
                   items={item.categories}
-                  onAddSubCategory={this.props.onAddSubCategory}
+                  onAddCategory={this.props.onAddCategory}
                   onDeleteCategory={this.props.onDeleteCategory}
                   onSaveCategory={this.props.onSaveCategory}
+                  onEditCategory={this.props.onEditCategory}
                   />
               </div> : null}
           </li>

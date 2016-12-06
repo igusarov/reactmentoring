@@ -11,9 +11,10 @@ class Content extends Component {
         <div className="Content__col Content__col--left">
           <CategoryList
             items={this.props.categories}
-            onAddSubCategory={this.props.onAddSubCategory}
+            onAddCategory={this.props.onAddSubCategory}
             onDeleteCategory={this.props.onDeleteCategory}
             onSaveCategory={this.props.onSaveCategory}
+            onEditCategory={this.props.onEditCategory}
             />
         </div>
         <div className="Content__col Content__col--right">

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import Content from './Content';
+import SaveItem from './SaveItem';
 import './App.css';
 
 class App extends Component {
@@ -36,9 +37,19 @@ class App extends Component {
     this.setState({categories: this.state.categories})
   }
 
-  saveCategory(category, newName) {
+  saveExistCategory(category, newName) {
     category.name = newName;
     this.setState({categories: this.state.categories})
+  }
+
+  saveCategory(newName) {
+    let category = this.state.saveCategory.category;
+    if(this.state.saveCategory.action === 'create'){
+      this.addCategory(newName, category);
+    }else{
+      this.saveExistCategory(category, newName);
+    }
+    this.setState({saveCategory: null, categories: this.state.categories});
   }
 
   createCategory(name) {
@@ -47,6 +58,30 @@ class App extends Component {
       name : name,
       categories : []
     }
+  }
+
+  onAddSubCategory(event, category){
+    this.setState({
+      saveCategory: {
+        action: 'create',
+        posX: event.clientX,
+        posY: event.clientY,
+        category: category,
+        initialName: ''
+      }
+    })
+  }
+
+  onEditCategory(event, category){
+    this.setState({
+      saveCategory: {
+        action: 'add',
+        posX: event.clientX,
+        posY: event.clientY,
+        category: category,
+        initialName: category.name
+      }
+    })
   }
 
   generateUniqueId() {
@@ -65,11 +100,17 @@ class App extends Component {
           <Content
             editor={true}
             categories={this.state.categories}
-            onAddSubCategory={this.addCategory}
+            onAddSubCategory={this.onAddSubCategory.bind(this)}
             onDeleteCategory={this.deleteCategory.bind(this)}
             onSaveCategory={this.saveCategory.bind(this)}
+            onEditCategory={this.onEditCategory.bind(this)}
           />
         </div>
+        {this.state.saveCategory ?
+          <div style={{top: this.state.saveCategory.posY, left: this.state.saveCategory.posX}} className="App__save-item">
+            <SaveItem value={this.state.saveCategory.initialName} onSave={this.saveCategory.bind(this)} />
+          </div> : null
+        }
       </div>
     );
   }
