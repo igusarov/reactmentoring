@@ -5,6 +5,24 @@ import TodoItemEditor from './TodoItemEditor';
 import './Content.css';
 
 class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  onTodoEdit(todo) {
+    this.setState({selectedTodo : todo});
+  }
+
+  onTodoEditCancel() {
+    this.setState({selectedTodo : null});
+  }
+
+  onTodoEditSave() {
+    this.setState({selectedTodo : null});
+  }
+
   render() {
     return (
       <div className="Content">
@@ -18,7 +36,12 @@ class Content extends Component {
             />
         </div>
         <div className="Content__col Content__col--right">
-          {this.props.editor ? <TodoItemEditor/> : <TodoList items={[1,2,3,4]}/>}
+          {this.props.selectedCategory && !this.state.selectedTodo ?
+            <TodoList onItemEdit={this.onTodoEdit.bind(this)} items={this.props.selectedCategory.todos}/> : null}
+          {this.state.selectedTodo ? <TodoItemEditor item={this.state.selectedTodo}
+                                                     onCancel={this.onTodoEditCancel.bind(this)}
+                                                     onSave={this.onTodoEditSave.bind(this)}
+          /> : null}
         </div>
       </div>
     );

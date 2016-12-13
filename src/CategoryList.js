@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router';
 import CategoryItem from './CategoryItem';
 import './CategoryList.css';
 
@@ -44,18 +45,19 @@ class CategoryList extends Component {
       <ul className="CategoryList">
         {this.props.items.sort(this.ascId.bind(this)).map((item) => (
           <li key={item.id} className="CategoryList__item-wrap">
+            <Link to={'/category/' + item.id}>
             <div className="CategoryList__item">
-              <CategoryItem
-                parent={this.props.parent}
-                item={item}
-                expanded={this.itemIsExpanded(item)}
-                onAdd={this.props.onAddCategory}
-                onDeleteCategory={this.props.onDeleteCategory}
-                onExpandCollapse={this.onExpandCollapse.bind(this)}
-                onEdit={this.props.onEditCategory}
-                onSave={this.props.onSaveCategory}
-              />
+                <CategoryItem
+                  parent={this.props.parent}
+                  item={item}
+                  expanded={this.itemIsExpanded(item)}
+                  onAdd={this.props.onAddCategory}
+                  onDeleteCategory={this.props.onDeleteCategory}
+                  onExpandCollapse={this.onExpandCollapse.bind(this)}
+                  onEdit={this.props.onEditCategory}
+                  onSave={this.props.onSaveCategory}/>
             </div>
+            </Link>
             { this.itemIsExpanded(item)?
               <div className="CategoryList__item-subcategory">
                 <CategoryList

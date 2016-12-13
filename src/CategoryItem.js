@@ -11,11 +11,23 @@ class CategoryItem extends Component {
   }
 
   onEdit(event) {
-    this.props.onEdit.call(this, event, this.props.item);
+    event.preventDefault();
+    this.props.onEdit(event, this.props.item);
   }
 
   onAdd(event) {
-    this.props.onAdd.call(this, event, this.props.item);
+    event.preventDefault();
+    this.props.onAdd(event, this.props.item);
+  }
+
+  onDelete(event) {
+    event.preventDefault();
+    this.props.onDeleteCategory(this.props.item, this.props.parent)
+  }
+
+  onExpandCollapse(event) {
+    event.preventDefault();
+    this.props.onExpandCollapse(this.props.item);
   }
 
   onSave() {
@@ -55,13 +67,13 @@ class CategoryItem extends Component {
     return (
       <div className="CategoryItem">
         <div className="CategoryItem__col">
-          {this.props.item.categories.length ? <div className={expandButtonClasses} onClick={this.props.onExpandCollapse.bind(this, this.props.item)}></div> : null}
+          {this.props.item.categories.length ? <div className={expandButtonClasses} onClick={this.onExpandCollapse.bind(this)}></div> : null}
           <div className="CategoryItem__name">{this.props.item.name}</div>
           <div className="CategoryItem__button CategoryItem__button--edit" onClick={this.onEdit.bind(this)}></div>
         </div>
         <div className="CategoryItem__col CategoryItem__col">
           <div className="CategoryItem__button CategoryItem__button--delete"
-               onClick={this.props.onDeleteCategory.bind(null, this.props.item, this.props.parent)}>
+               onClick={this.onDelete.bind(this)}>
           </div>
           <div className="CategoryItem__button CategoryItem__button--add"
                onClick={this.onAdd.bind(this)}>
