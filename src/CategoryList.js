@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
 import CategoryItem from './CategoryItem';
+import classNames from 'classnames';
 import './CategoryList.css';
 
 class CategoryList extends Component {
@@ -46,7 +47,10 @@ class CategoryList extends Component {
         {this.props.items.sort(this.ascId.bind(this)).map((item) => (
           <li key={item.id} className="CategoryList__item-wrap">
             <Link to={'/category/' + item.id}>
-            <div className="CategoryList__item">
+            <div className={classNames({
+              'CategoryList__item': true,
+              'CategoryList__item--selected': item === this.props.selectedCategory
+            })}>
                 <CategoryItem
                   parent={this.props.parent}
                   item={item}
@@ -58,6 +62,7 @@ class CategoryList extends Component {
                   onSave={this.props.onSaveCategory}
                   showMoveButton={this.props.showMoveButton}
                   onMoveTo={this.props.onMoveTo}
+                  selectedCategory={this.props.selectedCategory}
                 />
             </div>
             </Link>
@@ -72,6 +77,7 @@ class CategoryList extends Component {
                   onEditCategory={this.props.onEditCategory}
                   showMoveButton={this.props.showMoveButton}
                   onMoveTo={this.props.onMoveTo}
+                  selectedCategory={this.props.selectedCategory}
                   />
               </div> : null}
           </li>

@@ -17,3 +17,7 @@
   margin-bottom: 2px;
   padding: 10px 15px;
 }
+
+.CategoryList__item--selected {
+  background-color: lightgrey;
+}

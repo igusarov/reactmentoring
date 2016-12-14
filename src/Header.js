@@ -23,9 +23,10 @@ class Header extends Component {
           <div className="Header__add-item Header__add-item--left">
             <AddItem onAdd={this.props.onAddCategory}/>
           </div>
+          {this.props.showAddTodo ?
           <div className="Header__add-item Header__add-item--right">
             <AddItem onAdd={this.props.onAddTodo}/>
-          </div>
+          </div> : null}
         </div>
       </div>
     );

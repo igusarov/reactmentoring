@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import App from './App';
-import Content from './Content';
-import ContentTodoList from './ContentTodoList';
 import './index.css';
 
 

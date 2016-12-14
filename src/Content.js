@@ -25,16 +25,8 @@ class Content extends Component {
   }
 
   onMoveTo(category) {
-    let selectedTodo = this.state.selectedTodo;
-    let selectedCategory = this.props.selectedCategory;
-    selectedCategory.todos = selectedCategory.todos.filter(todo => todo != selectedTodo);
-    category.todos.push(selectedTodo);
-    this.props.onTodoUpdated();
+    this.props.onMoveTodoToCategory(this.state.selectedTodo, category);
     this.setState({selectedTodo : null});
-  }
-
-  componentDidUpdate(){
-    console.log(this.props.foundTodos);
   }
 
   render() {
@@ -49,6 +41,7 @@ class Content extends Component {
             onEditCategory={this.props.onEditCategory}
             showMoveButton={this.state.selectedTodo ? true : false}
             onMoveTo={this.onMoveTo.bind(this)}
+            selectedCategory={this.props.selectedCategory}
             />
         </div>
         <div className="Content__col Content__col--right">

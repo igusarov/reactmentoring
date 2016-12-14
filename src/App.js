@@ -10,9 +10,8 @@ class App extends Component {
     super();
     this._id = 0;
     this.state = {
-      categories : [this.createCategory('hello')]
+      categories : []
     };
-    this.addCategory = this.addCategory.bind(this);
   }
 
   updateProgressOfCompletedCategories() {
@@ -21,10 +20,10 @@ class App extends Component {
         let completedTodos = category.todos.filter((todo) => {
           return todo.done;
         });
-        return completedTodos.length === category.todos.length;
+        return completedTodos.length > 0 && completedTodos.length === category.todos.length;
     });
-    let progress = completedCategories.length / allCategories.length;
-    this.setState({progress: progress})
+    let progress = allCategories.length > 0 ? completedCategories.length / allCategories.length : 0;
+    this.setState({progress: progress});
   }
 
   addCategory(name, parentCategory) {
@@ -49,13 +48,15 @@ class App extends Component {
     if(!confirm('Delete the category?')){
       return;
     }
+    let categories = [];
     if(parentCategory) {
       parentCategory.categories = parentCategory.categories.filter(item => item !== category);
+      categories = this.state.categories;
     }else{
-      this.state.categories = this.state.categories.filter(item => item !== category);
+      categories = this.state.categories.filter(item => item !== category)
     }
+    this.setState({categories: categories});
     this.updateProgressOfCompletedCategories();
-    this.setState({categories: this.state.categories})
   }
 
   saveExistCategory(category, newName) {
@@ -78,7 +79,7 @@ class App extends Component {
       id : this.generateUniqueId(),
       name : name,
       categories : [],
-      todos : [this.createTodo('one'), this.createTodo('two'), this.createTodo('threee')]
+      todos : []
     }
   }
 
@@ -86,8 +87,8 @@ class App extends Component {
     return {
       id : this.generateUniqueId(),
       name : name,
-      description : 'dfdfgfd',
-      done : true
+      description : '',
+      done : false
     }
   }
 
@@ -104,48 +105,47 @@ class App extends Component {
   }
 
   findTodos(text, done) {
+    let textQuery = text || '';
     return this.getTodoFlatList(this.state.categories).filter((todo) => {
-      return true;
+      return (done ? todo.done === true : true) && todo.name.toLowerCase().search(textQuery.toLowerCase()) > -1;
     })
   }
 
-  componentDidMount() {
-    console.log('mount');
-  }
-
-  shouldComponentUpdate() {
-    return true;
-  }
-
   componentDidUpdate() {
-    console.log('app did update');
     if(this.props.routeParams.categoryId){
-      let categoryId = parseInt(this.props.routeParams.categoryId);
+
+      let categoryId = parseInt(this.props.routeParams.categoryId, 10);
       if(this.state.selectedCategory && this.state.selectedCategory.id === categoryId){
         return;
       }
       let selectedCategory = this.getCategoryById(this.state.categories, categoryId);
       this.resetState();
       this.setState({selectedCategory : selectedCategory});
+
     }else if(this.props.routeParams.done){
-      let query = this.props.routeParams.query;
-      let done = this.props.routeParams.done;
-      let todos = this.findTodos(query, done);
-      console.log(this.state.foundTodos);
-      console.log(todos);
-      if(this.state.foundTodos && (this.state.foundTodos.length === todos.length)){
-        console.log('sdfsf');
+
+      let paramsHash = JSON.stringify(this.props.routeParams);
+      if(this.state.paramsHash === paramsHash){
         return;
       }
-      this.setState({foundTodos : todos});
+      let query = this.props.routeParams.query;
+      let done = this.props.routeParams.done === 'true';
+      let todos = this.findTodos(query, done);
+      this.resetState();
+      this.setState({paramsHash : paramsHash, foundTodos : todos});
     }
+  }
+
+  componentDidMount() {
+    this.updateProgressOfCompletedCategories();
   }
 
   resetState() {
     this.setState({
       selectedCategory : null,
       saveCategory : null,
-      foundTodos : null
+      foundTodos : null,
+      paramsHash : null
     })
   }
 
@@ -159,6 +159,16 @@ class App extends Component {
         initialName: category.name
       }
     })
+  }
+
+  onMoveTodoToCategory(todo, category){
+     this.getCategoryFlatList(this.state.categories).forEach((category) => {
+       let indexOf = category.todos.indexOf(todo);
+       if(indexOf > -1){
+         category.todos.splice(indexOf, 1);
+       }
+     });
+     category.todos.push(todo);
   }
 
   getCategoryById(categories, id) {
@@ -193,8 +203,9 @@ class App extends Component {
         <div className="App__header">
           <Header
             onAddTodo={this.addTodo.bind(this)}
-            onAddCategory={this.addCategory}
+            onAddCategory={this.addCategory.bind(this)}
             progress={this.state.progress}
+            showAddTodo={this.state.selectedCategory ? true : false}
           />
         </div>
         <div className="App__content">
@@ -208,6 +219,7 @@ class App extends Component {
             onSaveCategory={this.saveCategory.bind(this)}
             onEditCategory={this.onEditCategory.bind(this)}
             onTodoUpdated={this.updateProgressOfCompletedCategories.bind(this)}
+            onMoveTodoToCategory={this.onMoveTodoToCategory.bind(this)}
           />
         </div>
         {this.state.saveCategory ?

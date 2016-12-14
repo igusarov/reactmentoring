@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './SaveItem.css';
 
 class SaveItem extends Component {
 
-  constructor(){
-    super();
-  }
-
-  onSave(){
+  onSave(e){
+    e.preventDefault();
     if (this.refs.input.value) {
       this.props.onSave(this.refs.input.value);
       this.refs.input.value = '';
@@ -16,11 +14,16 @@ class SaveItem extends Component {
 
   componentDidUpdate() {
     this.refs.input.value = this.props.value;
+    ReactDOM.findDOMNode(this.refs.input).focus();
+  }
+
+  componentDidMount() {
+    ReactDOM.findDOMNode(this.refs.input).focus();
   }
 
   render() {
     return (
-      <div className="SaveItem">
+      <form onSubmit={this.onSave.bind(this)} className="SaveItem">
         <div className="SaveItem__col">
           <input type="text" defaultValue={this.props.value} ref="input"/>
         </div>
@@ -29,7 +32,7 @@ class SaveItem extends Component {
                onClick={this.onSave.bind(this)}>
           </div>
         </div>
-      </div>
+      </form>
     );
   }
 }

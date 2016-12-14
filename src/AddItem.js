@@ -3,10 +3,6 @@ import './AddItem.css';
 
 class AddItem extends Component {
 
-  constructor(){
-    super();
-  }
-
   onAddClick(){
     if (this.refs.input.value) {
       this.props.onAdd(this.refs.input.value);
