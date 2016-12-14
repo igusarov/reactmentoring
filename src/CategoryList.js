@@ -55,7 +55,10 @@ class CategoryList extends Component {
                   onDeleteCategory={this.props.onDeleteCategory}
                   onExpandCollapse={this.onExpandCollapse.bind(this)}
                   onEdit={this.props.onEditCategory}
-                  onSave={this.props.onSaveCategory}/>
+                  onSave={this.props.onSaveCategory}
+                  showMoveButton={this.props.showMoveButton}
+                  onMoveTo={this.props.onMoveTo}
+                />
             </div>
             </Link>
             { this.itemIsExpanded(item)?
@@ -67,6 +70,8 @@ class CategoryList extends Component {
                   onDeleteCategory={this.props.onDeleteCategory}
                   onSaveCategory={this.props.onSaveCategory}
                   onEditCategory={this.props.onEditCategory}
+                  showMoveButton={this.props.showMoveButton}
+                  onMoveTo={this.props.onMoveTo}
                   />
               </div> : null}
           </li>

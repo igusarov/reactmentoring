@@ -6,7 +6,6 @@
 
 .ProgressBar__bar {
   background-color: cadetblue;
-  width: 40%; /* Adjust with JavaScript */
   height: 100%;
   border-radius: 10px;
 }

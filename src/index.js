@@ -11,7 +11,8 @@ ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={App}></Route>
     <Route path="/category/:categoryId" component={App}></Route>
-    <Route path="/search/:searchQuery" component={App}></Route>
+    <Route path="/search/:done/(:query)" component={App}></Route>
+
   </Router>
 ), document.getElementById('root'));
 

@@ -16,7 +16,7 @@ class Header extends Component {
         </div>
         <div className="Header__row">
           <div className="Header__progress">
-            <ProgressBar/>
+            <ProgressBar progress={this.props.progress}/>
           </div>
         </div>
         <div className="Header__row">

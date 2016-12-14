@@ -15,6 +15,18 @@ class App extends Component {
     this.addCategory = this.addCategory.bind(this);
   }
 
+  updateProgressOfCompletedCategories() {
+    let allCategories = this.getCategoryFlatList(this.state.categories);
+    let completedCategories = allCategories.filter((category) => {
+        let completedTodos = category.todos.filter((todo) => {
+          return todo.done;
+        });
+        return completedTodos.length === category.todos.length;
+    });
+    let progress = completedCategories.length / allCategories.length;
+    this.setState({progress: progress})
+  }
+
   addCategory(name, parentCategory) {
     let newCategory = this.createCategory(name);
     if(parentCategory){
@@ -22,6 +34,7 @@ class App extends Component {
     }else{
       this.state.categories.push(newCategory);
     }
+    this.updateProgressOfCompletedCategories();
     this.setState({categories: this.state.categories})
   }
 
@@ -41,6 +54,7 @@ class App extends Component {
     }else{
       this.state.categories = this.state.categories.filter(item => item !== category);
     }
+    this.updateProgressOfCompletedCategories();
     this.setState({categories: this.state.categories})
   }
 
@@ -89,6 +103,12 @@ class App extends Component {
     })
   }
 
+  findTodos(text, done) {
+    return this.getTodoFlatList(this.state.categories).filter((todo) => {
+      return true;
+    })
+  }
+
   componentDidMount() {
     console.log('mount');
   }
@@ -98,6 +118,7 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+    console.log('app did update');
     if(this.props.routeParams.categoryId){
       let categoryId = parseInt(this.props.routeParams.categoryId);
       if(this.state.selectedCategory && this.state.selectedCategory.id === categoryId){
@@ -106,22 +127,25 @@ class App extends Component {
       let selectedCategory = this.getCategoryById(this.state.categories, categoryId);
       this.resetState();
       this.setState({selectedCategory : selectedCategory});
-    }else if(this.props.routeParams.todoId){
-      let todoId = parseInt(this.props.routeParams.todoId);
-      if(this.state.selectedTodo && this.state.selectedTodo.id === todoId){
+    }else if(this.props.routeParams.done){
+      let query = this.props.routeParams.query;
+      let done = this.props.routeParams.done;
+      let todos = this.findTodos(query, done);
+      console.log(this.state.foundTodos);
+      console.log(todos);
+      if(this.state.foundTodos && (this.state.foundTodos.length === todos.length)){
+        console.log('sdfsf');
         return;
       }
-      let selectedTodo = this.getTodoById(this.state.categories, todoId);
-      this.resetState();
-      this.setState({selectedTodo : selectedTodo});
+      this.setState({foundTodos : todos});
     }
   }
 
   resetState() {
     this.setState({
       selectedCategory : null,
-      selectedTodo : null,
-      saveCategory : null
+      saveCategory : null,
+      foundTodos : null
     })
   }
 
@@ -138,41 +162,25 @@ class App extends Component {
   }
 
   getCategoryById(categories, id) {
-    let foundCategory = categories.find(function (category) {
+    return this.getCategoryFlatList(categories).find(function (category) {
       return category.id === id;
     });
-
-    if(!foundCategory) {
-      for(let i in categories){
-        let foundCategory = this.getCategoryById(categories[i].categories, id);
-        if(foundCategory){
-          return foundCategory;
-        }
-      }
-    }else{
-      return foundCategory;
-    }
   }
 
-  getTodoById(categories, id){
-    let foundTodo;
+  getCategoryFlatList(categories) {
+    let categoryFlatList = [];
+    categoryFlatList = categoryFlatList.concat(categories);
+    categories.forEach((category) => {
+      categoryFlatList = categoryFlatList.concat(this.getCategoryFlatList(category.categories));
+    });
 
-    for(let i in categories) {
-      foundTodo = categories[i].todos.find(function (todo) {
-        return todo.id === id;
-      });
-    }
+    return categoryFlatList;
+  }
 
-    if(!foundTodo) {
-      for(let i in categories){
-        let foundTodo = this.getTodoById(categories[i].categories, id);
-        if(foundTodo){
-          return foundTodo;
-        }
-      }
-    }else{
-      return foundTodo;
-    }
+  getTodoFlatList(categories) {
+    let todos = [];
+    this.getCategoryFlatList(categories).forEach(category => todos = todos.concat(category.todos))
+    return todos;
   }
 
   generateUniqueId() {
@@ -186,6 +194,7 @@ class App extends Component {
           <Header
             onAddTodo={this.addTodo.bind(this)}
             onAddCategory={this.addCategory}
+            progress={this.state.progress}
           />
         </div>
         <div className="App__content">
@@ -193,11 +202,12 @@ class App extends Component {
             editor={true}
             categories={this.state.categories}
             selectedCategory={this.state.selectedCategory}
-            selectedTodo={this.state.selectedTodo}
+            foundTodos={this.state.foundTodos}
             onAddSubCategory={this.onAddSubCategory.bind(this)}
             onDeleteCategory={this.deleteCategory.bind(this)}
             onSaveCategory={this.saveCategory.bind(this)}
             onEditCategory={this.onEditCategory.bind(this)}
+            onTodoUpdated={this.updateProgressOfCompletedCategories.bind(this)}
           />
         </div>
         {this.state.saveCategory ?

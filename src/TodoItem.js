@@ -11,6 +11,7 @@ class TodoItem extends Component {
   onChange() {
     if(this.refs.done) {
       this.props.item.done = this.refs.done.checked;
+      this.props.onItemUpdated();
     }
   }
 

@@ -49,3 +49,7 @@
 .CategoryItem__button--save::before{
   content: "\f0c7";
 }
+
+.CategoryItem__button--move::before{
+  content: "\f112";
+}

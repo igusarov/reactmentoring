@@ -20,7 +20,21 @@ class Content extends Component {
   }
 
   onTodoEditSave() {
+    this.props.onTodoUpdated();
     this.setState({selectedTodo : null});
+  }
+
+  onMoveTo(category) {
+    let selectedTodo = this.state.selectedTodo;
+    let selectedCategory = this.props.selectedCategory;
+    selectedCategory.todos = selectedCategory.todos.filter(todo => todo != selectedTodo);
+    category.todos.push(selectedTodo);
+    this.props.onTodoUpdated();
+    this.setState({selectedTodo : null});
+  }
+
+  componentDidUpdate(){
+    console.log(this.props.foundTodos);
   }
 
   render() {
@@ -33,11 +47,15 @@ class Content extends Component {
             onDeleteCategory={this.props.onDeleteCategory}
             onSaveCategory={this.props.onSaveCategory}
             onEditCategory={this.props.onEditCategory}
+            showMoveButton={this.state.selectedTodo ? true : false}
+            onMoveTo={this.onMoveTo.bind(this)}
             />
         </div>
         <div className="Content__col Content__col--right">
           {this.props.selectedCategory && !this.state.selectedTodo ?
-            <TodoList onItemEdit={this.onTodoEdit.bind(this)} items={this.props.selectedCategory.todos}/> : null}
+            <TodoList onItemUpdated={this.props.onTodoUpdated.bind(this)} onItemEdit={this.onTodoEdit.bind(this)} items={this.props.selectedCategory.todos}/> : null}
+          {this.props.foundTodos && !this.state.selectedTodo ?
+              <TodoList onItemUpdated={this.props.onTodoUpdated.bind(this)} onItemEdit={this.onTodoEdit.bind(this)} items={this.props.foundTodos}/> : null}
           {this.state.selectedTodo ? <TodoItemEditor item={this.state.selectedTodo}
                                                      onCancel={this.onTodoEditCancel.bind(this)}
                                                      onSave={this.onTodoEditSave.bind(this)}

@@ -35,6 +35,11 @@ class CategoryItem extends Component {
     this.props.onSave(this.props.item, this.refs.input.value);
   }
 
+  onMove(event) {
+    event.preventDefault();
+    this.props.onMoveTo(this.props.item);
+  }
+
   componentDidUpdate() {
     if(this.state.edit && !this.refs.input.value) {
       this.refs.input.value = this.props.item.name;
@@ -72,12 +77,18 @@ class CategoryItem extends Component {
           <div className="CategoryItem__button CategoryItem__button--edit" onClick={this.onEdit.bind(this)}></div>
         </div>
         <div className="CategoryItem__col CategoryItem__col">
+            {!this.props.showMoveButton ?
           <div className="CategoryItem__button CategoryItem__button--delete"
                onClick={this.onDelete.bind(this)}>
-          </div>
+          </div> : null}
+            {!this.props.showMoveButton ?
           <div className="CategoryItem__button CategoryItem__button--add"
                onClick={this.onAdd.bind(this)}>
-          </div>
+          </div> : null}
+            {this.props.showMoveButton ?
+                <div className="CategoryItem__button CategoryItem__button--move"
+                     onClick={this.onMove.bind(this)}>
+                </div> : null}
         </div>
       </div>
     )

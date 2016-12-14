@@ -5,9 +5,10 @@ import './TodoList.css';
 class TodoList extends Component {
   render() {
     return (
-      <ul className="TodoList">
-        {this.props.items.map((item)=><li className="TodoList__item" key={item.id}><TodoItem onItemEdit={this.props.onItemEdit} item={item}/></li>)}
-      </ul>
+        this.props.items.length > 0 ?
+          <ul className="TodoList">
+            {this.props.items.map((item)=><li className="TodoList__item" key={item.id}><TodoItem onItemUpdated={this.props.onItemUpdated} onItemEdit={this.props.onItemEdit} item={item}/></li>)}
+          </ul> : <div>List is empty</div>
     );
   }
 }
