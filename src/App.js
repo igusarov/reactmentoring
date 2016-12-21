@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from './Header';
 import SaveItem from './SaveItem';
 import Content from './Content';
@@ -112,28 +113,6 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    if(this.props.routeParams.categoryId){
-
-      let categoryId = parseInt(this.props.routeParams.categoryId, 10);
-      if(this.state.selectedCategory && this.state.selectedCategory.id === categoryId){
-        return;
-      }
-      let selectedCategory = this.getCategoryById(this.state.categories, categoryId);
-      this.resetState();
-      this.setState({selectedCategory : selectedCategory});
-
-    }else if(this.props.routeParams.done){
-
-      let paramsHash = JSON.stringify(this.props.routeParams);
-      if(this.state.paramsHash === paramsHash){
-        return;
-      }
-      let query = this.props.routeParams.query;
-      let done = this.props.routeParams.done === 'true';
-      let todos = this.findTodos(query, done);
-      this.resetState();
-      this.setState({paramsHash : paramsHash, foundTodos : todos});
-    }
   }
 
   componentDidMount() {
@@ -198,8 +177,11 @@ class App extends Component {
   }
 
   render() {
+
+    const { categories, handleClick } = this.props;
+
     return (
-      <div className="App">
+      <div className="App" onClick={handleClick}>
         <div className="App__header">
           <Header
             onAddTodo={this.addTodo.bind(this)}
@@ -231,5 +213,23 @@ class App extends Component {
     );
   }
 }
+
+App = connect(
+    state => {
+      console.log(state)
+      return ({
+      categories : state.categories
+    })},
+    (dispatch, props) => ({
+      onClick() {
+        dispatch({type : 'ADD_TODO'})
+      },
+
+      handleClick() {
+        dispatch({type : 'ADD_TOO'})
+      }
+
+    })
+)(App);
 
 export default App;

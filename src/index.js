@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux'
 import App from './App';
+import reducer from './reducers';
 import './index.css';
 
+const store = createStore(reducer);
 
-ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route path="/" component={App}></Route>
-    <Route path="/category/:categoryId" component={App}></Route>
-    <Route path="/search/:done/(:query)" component={App}></Route>
-
-  </Router>
-), document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root')
+);
 
