@@ -72,7 +72,7 @@ class CategoryItem extends Component {
     return (
       <div className="CategoryItem">
         <div className="CategoryItem__col">
-          {this.props.item.categories.length ? <div className={expandButtonClasses} onClick={this.onExpandCollapse.bind(this)}></div> : null}
+          {this.props.expandable ? <div className={expandButtonClasses} onClick={this.onExpandCollapse.bind(this)}></div> : null}
           <div className="CategoryItem__name">{this.props.item.name}</div>
           <div className="CategoryItem__button CategoryItem__button--edit" onClick={this.onEdit.bind(this)}></div>
         </div>

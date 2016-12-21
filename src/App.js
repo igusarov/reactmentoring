@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Header from './Header';
 import SaveItem from './SaveItem';
 import Content from './Content';
+import { bindActionCreators } from 'redux'
+import * as actions from './actions'
 import './App.css';
 
 class App extends Component {
@@ -28,14 +30,15 @@ class App extends Component {
   }
 
   addCategory(name, parentCategory) {
-    let newCategory = this.createCategory(name);
+
+    const category = this.createCategory(name);
+
     if(parentCategory){
-      parentCategory.categories.push(newCategory);
+      this.props.actions.addCategory({category, parentCategory});
     }else{
-      this.state.categories.push(newCategory);
+      this.props.actions.addCategory({category});
     }
-    this.updateProgressOfCompletedCategories();
-    this.setState({categories: this.state.categories})
+
   }
 
   addTodo(name) {
@@ -49,20 +52,18 @@ class App extends Component {
     if(!confirm('Delete the category?')){
       return;
     }
-    let categories = [];
-    if(parentCategory) {
-      parentCategory.categories = parentCategory.categories.filter(item => item !== category);
-      categories = this.state.categories;
+
+    if(parentCategory){
+      this.props.actions.deleteCategory({category, parentCategory});
     }else{
-      categories = this.state.categories.filter(item => item !== category)
+      this.props.actions.deleteCategory({category});
     }
-    this.setState({categories: categories});
-    this.updateProgressOfCompletedCategories();
   }
 
   saveExistCategory(category, newName) {
-    category.name = newName;
-    this.setState({categories: this.state.categories})
+    let newCategory = {...category};
+    newCategory.name = newName;
+    this.props.actions.updateCategory({category, newCategory});
   }
 
   saveCategory(newName) {
@@ -178,10 +179,10 @@ class App extends Component {
 
   render() {
 
-    const { categories, handleClick } = this.props;
+    const {categories, actions} = this.props;
 
     return (
-      <div className="App" onClick={handleClick}>
+      <div className="App">
         <div className="App__header">
           <Header
             onAddTodo={this.addTodo.bind(this)}
@@ -193,7 +194,7 @@ class App extends Component {
         <div className="App__content">
           <Content
             editor={true}
-            categories={this.state.categories}
+            categories={categories}
             selectedCategory={this.state.selectedCategory}
             foundTodos={this.state.foundTodos}
             onAddSubCategory={this.onAddSubCategory.bind(this)}
@@ -214,22 +215,14 @@ class App extends Component {
   }
 }
 
-App = connect(
-    state => {
-      console.log(state)
-      return ({
-      categories : state.categories
-    })},
-    (dispatch, props) => ({
-      onClick() {
-        dispatch({type : 'ADD_TODO'})
-      },
+const mapStateToProps = state => ({
+  categories: state.categories
+});
 
-      handleClick() {
-        dispatch({type : 'ADD_TOO'})
-      }
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+});
 
-    })
-)(App);
+App = connect(mapStateToProps,mapDispatchToProps)(App);
 
 export default App;

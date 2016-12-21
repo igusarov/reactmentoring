@@ -34,17 +34,27 @@ class CategoryList extends Component {
   }
 
   itemIsExpanded(item) {
-    return item.categories.length && this.state.expandedItems.indexOf(item) > -1
+    return this.itemIsExpandable(item) && this.state.expandedItems.indexOf(item) > -1;
+  }
+
+  itemIsExpandable(item) {
+    return this.props.items[item.id] ? true : false;
   }
 
   ascId(a, b) {
     return a.id < b.id;
   }
 
+  get categories() {
+    let parentId = this.props.parent ? this.props.parent.id : 'root';
+    return this.props.items[parentId];
+  }
+
   render() {
+
     return (
       <ul className="CategoryList">
-        {this.props.items.sort(this.ascId.bind(this)).map((item) => (
+        {this.categories.sort(this.ascId.bind(this)).map((item) => (
           <li key={item.id} className="CategoryList__item-wrap">
             <Link to={'/category/' + item.id}>
             <div className={classNames({
@@ -55,6 +65,7 @@ class CategoryList extends Component {
                   parent={this.props.parent}
                   item={item}
                   expanded={this.itemIsExpanded(item)}
+                  expandable={this.itemIsExpandable(item)}
                   onAdd={this.props.onAddCategory}
                   onDeleteCategory={this.props.onDeleteCategory}
                   onExpandCollapse={this.onExpandCollapse.bind(this)}
@@ -70,7 +81,7 @@ class CategoryList extends Component {
               <div className="CategoryList__item-subcategory">
                 <CategoryList
                   parent={item}
-                  items={item.categories}
+                  items={this.props.items}
                   onAddCategory={this.props.onAddCategory}
                   onDeleteCategory={this.props.onDeleteCategory}
                   onSaveCategory={this.props.onSaveCategory}
