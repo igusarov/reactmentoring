@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
+import { connect } from 'react-redux';
 import CategoryItem from './CategoryItem';
 import classNames from 'classnames';
+import * as actions from './actions';
+import { bindActionCreators } from 'redux';
 import './CategoryList.css';
 
 class CategoryList extends Component {
@@ -11,6 +14,25 @@ class CategoryList extends Component {
     this.state = {
       expandedItems : []
     };
+  }
+
+  onAdd(event, parentCategory) {
+    this.props.actions.beforeToAddCategory({event, parentCategory});
+  }
+
+  onEdit(event, category) {
+    this.props.actions.beforeToUpdateCategory({event, category});
+  }
+
+  deleteCategory(category, parentCategory) {
+    if(!confirm('Delete the category?')){
+      return;
+    }
+    if(parentCategory){
+      this.props.actions.deleteCategory({category, parentCategory});
+    }else{
+      this.props.actions.deleteCategory({category});
+    }
   }
 
   expandItem(item){
@@ -38,23 +60,19 @@ class CategoryList extends Component {
   }
 
   itemIsExpandable(item) {
-    return this.props.items[item.id] ? true : false;
+    return this.props.allCategories[item.id] ? true : false;
   }
 
   ascId(a, b) {
     return a.id < b.id;
   }
 
-  get categories() {
-    let parentId = this.props.parent ? this.props.parent.id : 'root';
-    return this.props.items[parentId];
-  }
 
   render() {
 
     return (
       <ul className="CategoryList">
-        {this.categories.sort(this.ascId.bind(this)).map((item) => (
+        {this.props.categories.sort(this.ascId.bind(this)).map((item) => (
           <li key={item.id} className="CategoryList__item-wrap">
             <Link to={'/category/' + item.id}>
             <div className={classNames({
@@ -66,30 +84,19 @@ class CategoryList extends Component {
                   item={item}
                   expanded={this.itemIsExpanded(item)}
                   expandable={this.itemIsExpandable(item)}
-                  onAdd={this.props.onAddCategory}
-                  onDeleteCategory={this.props.onDeleteCategory}
+                  onAdd={this.onAdd.bind(this)}
+                  onDeleteCategory={this.deleteCategory.bind(this)}
                   onExpandCollapse={this.onExpandCollapse.bind(this)}
-                  onEdit={this.props.onEditCategory}
+                  onEdit={this.onEdit.bind(this)}
                   onSave={this.props.onSaveCategory}
                   showMoveButton={this.props.showMoveButton}
                   onMoveTo={this.props.onMoveTo}
-                  selectedCategory={this.props.selectedCategory}
                 />
             </div>
             </Link>
             { this.itemIsExpanded(item)?
               <div className="CategoryList__item-subcategory">
-                <CategoryList
-                  parent={item}
-                  items={this.props.items}
-                  onAddCategory={this.props.onAddCategory}
-                  onDeleteCategory={this.props.onDeleteCategory}
-                  onSaveCategory={this.props.onSaveCategory}
-                  onEditCategory={this.props.onEditCategory}
-                  showMoveButton={this.props.showMoveButton}
-                  onMoveTo={this.props.onMoveTo}
-                  selectedCategory={this.props.selectedCategory}
-                  />
+                <ConnnectedCategoryList parent={item}/>
               </div> : null}
           </li>
         ))}
@@ -98,4 +105,18 @@ class CategoryList extends Component {
   }
 }
 
-export default CategoryList;
+const mapStateToProps = (state, ownProps) => {
+  const parentId = ownProps.parent ? ownProps.parent.id : 'root';
+  return {
+    categories: state.categories[parentId],
+    allCategories: state.categories
+  }
+};
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+});
+
+const ConnnectedCategoryList = connect(mapStateToProps,mapDispatchToProps)(CategoryList);
+
+export default ConnnectedCategoryList;

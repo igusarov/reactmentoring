@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from './Header';
 import SaveItem from './SaveItem';
-import Content from './Content';
+import CategoryList from './CategoryList';
 import { bindActionCreators } from 'redux'
 import * as actions from './actions'
 import './App.css';
@@ -29,16 +29,8 @@ class App extends Component {
     this.setState({progress: progress});
   }
 
-  addCategory(name, parentCategory) {
-
-    const category = this.createCategory(name);
-
-    if(parentCategory){
-      this.props.actions.addCategory({category, parentCategory});
-    }else{
-      this.props.actions.addCategory({category});
-    }
-
+  addCategory(name) {
+    this.props.actions.addCategory({name});
   }
 
   addTodo(name) {
@@ -48,41 +40,18 @@ class App extends Component {
     this.setState({categories: this.state.categories});
   }
 
-  deleteCategory(category, parentCategory) {
-    if(!confirm('Delete the category?')){
-      return;
-    }
-
-    if(parentCategory){
-      this.props.actions.deleteCategory({category, parentCategory});
-    }else{
-      this.props.actions.deleteCategory({category});
-    }
-  }
-
-  saveExistCategory(category, newName) {
-    let newCategory = {...category};
-    newCategory.name = newName;
-    this.props.actions.updateCategory({category, newCategory});
-  }
-
   saveCategory(newName) {
-    let category = this.state.saveCategory.category;
-    if(this.state.saveCategory.action === 'create'){
-      this.addCategory(newName, category);
+    let category = this.props.popup.saveCategory.category;
+    let parentCategory = this.props.popup.saveCategory.parentCategory;
+    let name = newName;
+    if(parentCategory){
+      this.props.actions.addCategory({name, parentCategory});
     }else{
-      this.saveExistCategory(category, newName);
+      let newCategory = {...category};
+      newCategory.name = newName;
+      this.props.actions.updateCategory({category, newCategory});
     }
-    this.setState({saveCategory: null, categories: this.state.categories});
-  }
-
-  createCategory(name) {
-    return {
-      id : this.generateUniqueId(),
-      name : name,
-      categories : [],
-      todos : []
-    }
+    this.props.actions.afterSavingCategory();
   }
 
   createTodo(name){
@@ -94,26 +63,12 @@ class App extends Component {
     }
   }
 
-  onAddSubCategory(event, category){
-    this.setState({
-      saveCategory: {
-        action: 'create',
-        posX: event.clientX,
-        posY: event.clientY,
-        category: category,
-        initialName: ''
-      }
-    })
-  }
 
   findTodos(text, done) {
     let textQuery = text || '';
     return this.getTodoFlatList(this.state.categories).filter((todo) => {
       return (done ? todo.done === true : true) && todo.name.toLowerCase().search(textQuery.toLowerCase()) > -1;
     })
-  }
-
-  componentDidUpdate() {
   }
 
   componentDidMount() {
@@ -188,26 +143,22 @@ class App extends Component {
             onAddTodo={this.addTodo.bind(this)}
             onAddCategory={this.addCategory.bind(this)}
             progress={this.state.progress}
-            showAddTodo={this.state.selectedCategory ? true : false}
+            showAddTodo={this.props.layout.selectedCategory ? true : false}
           />
         </div>
         <div className="App__content">
-          <Content
-            editor={true}
-            categories={categories}
-            selectedCategory={this.state.selectedCategory}
-            foundTodos={this.state.foundTodos}
-            onAddSubCategory={this.onAddSubCategory.bind(this)}
-            onDeleteCategory={this.deleteCategory.bind(this)}
-            onSaveCategory={this.saveCategory.bind(this)}
-            onEditCategory={this.onEditCategory.bind(this)}
-            onTodoUpdated={this.updateProgressOfCompletedCategories.bind(this)}
-            onMoveTodoToCategory={this.onMoveTodoToCategory.bind(this)}
-          />
+          <div className="Content">
+            <div className="Content__col Content__col--left">
+              <CategoryList/>
+            </div>
+            <div className="Content__col Content__col--right">
+              {this.props.children}
+            </div>
+          </div>
         </div>
-        {this.state.saveCategory ?
-          <div style={{top: this.state.saveCategory.posY, left: this.state.saveCategory.posX}} className="App__save-item">
-            <SaveItem value={this.state.saveCategory.initialName} onSave={this.saveCategory.bind(this)} />
+        {this.props.popup.saveCategory ?
+          <div style={{top: this.props.popup.saveCategory.posY, left: this.props.popup.saveCategory.posX}} className="App__save-item">
+            <SaveItem value={this.props.popup.saveCategory.initialName} onSave={this.saveCategory.bind(this)} />
           </div> : null
         }
       </div>
@@ -216,7 +167,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  categories: state.categories
+  categories: state.categories,
+  popup: state.popup,
+  layout: state.layout
 });
 
 const mapDispatchToProps = dispatch => ({

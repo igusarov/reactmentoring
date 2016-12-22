@@ -3,7 +3,7 @@ import { ADD_CATEGORY, DELETE_CATEGORY,  UPDATE_CATEGORY} from '../actions';
 const categories = (state = [], action) => {
   switch (action.type) {
     case ADD_CATEGORY:
-      return [...state, action.category];
+      return [...state, createCategory(action.name)];
     case UPDATE_CATEGORY:
       return state.filter(category => category.id !== action.category.id).concat(action.newCategory);
     default:
@@ -32,7 +32,22 @@ const findParentCategoryId = (state, category) => {
   return null;
 };
 
+let nextId = 0;
+const createCategory = (name) => {
+  return {
+    id : nextId++,
+    name : name,
+    categories : [],
+    todos : []
+  }
+}
+
 export default (state = {}, action) => {
+
+  if(![ADD_CATEGORY, DELETE_CATEGORY,  UPDATE_CATEGORY].includes(action.type)){
+    return state.root ? state : {root : []};
+  }
+
   const { category, parentCategory } = action;
   const parentId = typeof parentCategory !== "undefined" ? parentCategory.id : (findParentCategoryId(state, category) || 'root');
 

@@ -33,16 +33,7 @@ class Content extends Component {
     return (
       <div className="Content">
         <div className="Content__col Content__col--left">
-          <CategoryList
-            items={this.props.categories}
-            onAddCategory={this.props.onAddSubCategory}
-            onDeleteCategory={this.props.onDeleteCategory}
-            onSaveCategory={this.props.onSaveCategory}
-            onEditCategory={this.props.onEditCategory}
-            showMoveButton={this.state.selectedTodo ? true : false}
-            onMoveTo={this.onMoveTo.bind(this)}
-            selectedCategory={this.props.selectedCategory}
-            />
+          <CategoryList/>
         </div>
         <div className="Content__col Content__col--right">
           {this.props.selectedCategory && !this.state.selectedTodo ?
