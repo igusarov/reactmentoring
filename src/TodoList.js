@@ -7,7 +7,7 @@ class TodoList extends Component {
     return (
         this.props.items.length > 0 ?
           <ul className="TodoList">
-            {this.props.items.map((item)=><li className="TodoList__item" key={item.id}><TodoItem onItemUpdated={this.props.onItemUpdated} onItemEdit={this.props.onItemEdit} item={item}/></li>)}
+            {this.props.items.map((item)=><li className="TodoList__item" key={item.id}><TodoItem onChecked={this.props.onTodoChecked} onTodoEdit={this.props.onTodoEdit} item={item}/></li>)}
           </ul> : <div>List is empty</div>
     );
   }

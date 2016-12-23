@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TodoList from '../TodoList';
+import Todos from './Todos';
 import * as actions from '../actions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -23,7 +23,7 @@ class SelectedCategoryContent extends Component {
 
   render() {
     return (
-        <TodoList items={[]}/>
+        <Todos items={this.props.todos}/>
     );
   }
 }

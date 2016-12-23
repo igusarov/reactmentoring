@@ -35,6 +35,11 @@ class CategoryList extends Component {
     }
   }
 
+  onMoveTo(category) {
+    this.props.actions.closeTodoEditor();
+    this.props.actions.moveTodoToCategory(this.props.selectedTodo, category);
+  }
+
   expandItem(item){
     let expandedItems = this.state.expandedItems;
     expandedItems.push(item);
@@ -77,7 +82,7 @@ class CategoryList extends Component {
             <Link to={'/category/' + item.id}>
             <div className={classNames({
               'CategoryList__item': true,
-              'CategoryList__item--selected': item === this.props.selectedCategory
+              'CategoryList__item--selected': item.id === this.props.selectedCategoryId
             })}>
                 <CategoryItem
                   parent={this.props.parent}
@@ -90,7 +95,7 @@ class CategoryList extends Component {
                   onEdit={this.onEdit.bind(this)}
                   onSave={this.props.onSaveCategory}
                   showMoveButton={this.props.showMoveButton}
-                  onMoveTo={this.props.onMoveTo}
+                  onMoveTo={this.onMoveTo.bind(this)}
                 />
             </div>
             </Link>
@@ -108,6 +113,9 @@ class CategoryList extends Component {
 const mapStateToProps = (state, ownProps) => {
   const parentId = ownProps.parent ? ownProps.parent.id : 'root';
   return {
+    selectedCategoryId: state.layout.selectedCategory ? parseInt(state.layout.selectedCategory.id) : null,
+    selectedTodo: state.layout.selectedTodo,
+    showMoveButton: state.layout.selectedTodo ? true : false,
     categories: state.categories[parentId],
     allCategories: state.categories
   }

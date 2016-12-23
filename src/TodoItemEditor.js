@@ -5,12 +5,12 @@ class TodoItemEditor extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    let item = this.props.item;
+    let item = {...this.props.item};
     item.name = this.refs.name.value;
     item.description = this.refs.description.value;
     item.done = this.refs.done.checked;
 
-    this.props.onSave();
+    this.props.onSave(this.props.item, item);
   }
 
   onCancel(e) {

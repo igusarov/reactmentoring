@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import TodoList from '../TodoList';
+import Todos from './Todos';
 
 class EmptyContent extends Component {
   render() {
     return (
-        <TodoList items={[]}/>
+        <Todos items={[]}/>
     );
   }
 }

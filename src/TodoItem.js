@@ -4,21 +4,18 @@ import './TodoItem.css';
 class TodoItem extends Component {
 
   onEdit(){
-    this.props.onItemEdit(this.props.item);
+    this.props.onTodoEdit(this.props.item);
   }
 
   onChange() {
-    if(this.refs.done) {
-      this.props.item.done = this.refs.done.checked;
-      this.props.onItemUpdated();
-    }
+    this.props.onChecked(this.props.item);
   }
 
   render() {
     return (
       <div className="TodoItem">
         <div className="TodoItem__col">
-          <input type="checkbox" defaultChecked={this.props.item.done} ref="done" onChange={this.onChange.bind(this)}/>
+          <input type="checkbox" defaultChecked={this.props.item.done} onChange={this.onChange.bind(this)}/>
             <div className="TodoItem__name">{this.props.item.name}</div>
         </div>
         <div className="TodoItem__col">

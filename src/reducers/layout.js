@@ -1,4 +1,4 @@
-import { SELECTED_CATEGORY_CONTENT_SHOWN} from '../actions';
+import { SELECTED_CATEGORY_CONTENT_SHOWN, OPEN_TODO_EDITOR, CLOSE_TODO_EDITOR} from '../actions';
 
 export default (state = {}, action) => {
 
@@ -9,7 +9,15 @@ export default (state = {}, action) => {
           id : action.categoryId
         }
       };
-
+    case OPEN_TODO_EDITOR:
+      return {
+        ...state,
+        selectedTodo: action.todo
+      };
+    case CLOSE_TODO_EDITOR:
+      let cloneState = {...state};
+      delete cloneState.selectedTodo;
+      return cloneState;
     default:
       return state
   }

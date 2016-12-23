@@ -34,10 +34,8 @@ class App extends Component {
   }
 
   addTodo(name) {
-    let newTodo = this.createTodo(name);
-    let selectedCategory = this.state.selectedCategory;
-    selectedCategory.todos.push(newTodo);
-    this.setState({categories: this.state.categories});
+    let categoryId = this.props.layout.selectedCategory.id;
+    this.props.actions.addTodo(name, categoryId);
   }
 
   saveCategory(newName) {
