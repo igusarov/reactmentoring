@@ -1,6 +1,8 @@
-import { SELECTED_CATEGORY_CONTENT_SHOWN, OPEN_TODO_EDITOR, CLOSE_TODO_EDITOR} from '../actions';
+import _ from 'lodash';
+import { SELECTED_CATEGORY_CONTENT_SHOWN, OPEN_TODO_EDITOR, CLOSE_TODO_EDITOR, SEARCH_CONTENT_SHOWN} from '../actions';
 
 export default (state = {}, action) => {
+  let cloneState;
 
   switch (action.type) {
     case SELECTED_CATEGORY_CONTENT_SHOWN:
@@ -15,12 +17,15 @@ export default (state = {}, action) => {
         selectedTodo: action.todo
       };
     case CLOSE_TODO_EDITOR:
-      let cloneState = {...state};
+      cloneState = {...state};
       delete cloneState.selectedTodo;
+      return cloneState;
+    case SEARCH_CONTENT_SHOWN:
+      cloneState = {...state};
+      delete cloneState.selectedCategory;
       return cloneState;
     default:
       return state
   }
-
 }
 

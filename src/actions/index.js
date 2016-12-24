@@ -10,6 +10,7 @@ export const UPDATE_TODO = 'UPDATE_TODO';
 export const OPEN_TODO_EDITOR = 'OPEN_TODO_EDITOR';
 export const CLOSE_TODO_EDITOR = 'CLOSE_TODO_EDITOR';
 export const MOVE_TODO_TO_CATEGORY = 'MOVE_TODO_TO_CATEGORY';
+export const SEARCH_CONTENT_SHOWN = 'SEARCH_CONTENT_SHOWN';
 
 export const addCategory = ({name, parentCategory}) => ({
   type: ADD_CATEGORY,
@@ -75,5 +76,9 @@ export const moveTodoToCategory = (todo, toCategory) => ({
   type: MOVE_TODO_TO_CATEGORY,
   todo,
   toCategory
+});
+
+export const searchContentShown = () => ({
+  type: SEARCH_CONTENT_SHOWN
 });
 

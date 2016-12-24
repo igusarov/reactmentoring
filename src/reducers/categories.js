@@ -20,7 +20,7 @@ const getAllincludedCategoryIds = (state, parentId) => (
 const deleteMany = (state, categoryIds) => {
   state = { ...state };
   categoryIds.forEach(id => delete state[id]);
-  return state
+  return state;
 };
 
 const findParentCategoryId = (state, category) => {
