@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux'
-import App from './App';
+import App from './containers/App';
 import reducer from './reducers';
 import EmptyContent from './containers/EmptyContent';
 import SelectedCategoryContent from './containers/SelectedCategoryContent';

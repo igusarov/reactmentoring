@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TodoList from '../TodoList';
-import TodoItemEditor from '../TodoItemEditor';
+import TodoList from '../components/TodoList';
+import TodoItemEditor from '../components/TodoItemEditor';
 import * as actions from '../actions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
