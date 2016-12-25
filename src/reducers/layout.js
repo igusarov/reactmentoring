@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { SELECTED_CATEGORY_CONTENT_SHOWN, OPEN_TODO_EDITOR, CLOSE_TODO_EDITOR, SEARCH_CONTENT_SHOWN} from '../actions';
 
 export default (state = {}, action) => {

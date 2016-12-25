@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Header from './Header';
 import SaveItem from './SaveItem';
 import CategoryList from './CategoryList';
@@ -15,18 +16,6 @@ class App extends Component {
     this.state = {
       categories : []
     };
-  }
-
-  updateProgressOfCompletedCategories() {
-    let allCategories = this.getCategoryFlatList(this.state.categories);
-    let completedCategories = allCategories.filter((category) => {
-        let completedTodos = category.todos.filter((todo) => {
-          return todo.done;
-        });
-        return completedTodos.length > 0 && completedTodos.length === category.todos.length;
-    });
-    let progress = allCategories.length > 0 ? completedCategories.length / allCategories.length : 0;
-    this.setState({progress: progress});
   }
 
   addCategory(name) {
@@ -67,10 +56,6 @@ class App extends Component {
     return this.getTodoFlatList(this.state.categories).filter((todo) => {
       return (done ? todo.done === true : true) && todo.name.toLowerCase().search(textQuery.toLowerCase()) > -1;
     })
-  }
-
-  componentDidMount() {
-    this.updateProgressOfCompletedCategories();
   }
 
   resetState() {
@@ -140,7 +125,7 @@ class App extends Component {
           <Header
             onAddTodo={this.addTodo.bind(this)}
             onAddCategory={this.addCategory.bind(this)}
-            progress={this.state.progress}
+            progress={this.props.progress}
             showAddTodo={this.props.layout.selectedCategory ? true : false}
           />
         </div>
@@ -164,8 +149,21 @@ class App extends Component {
   }
 }
 
+const procProgress = (categories, todos) => {
+  let all = _(categories).reduce((count, categories) => count + categories.length, 0);
+  let completed = _(categories).reduce((count, categories) => {
+    console.log(categories);
+    return count + categories.reduce((count, category) => {
+      return count + ((todos[category.id] || []).find(todo => todo.done === false) ? 0 : 1);
+    }, 0)
+  }, 0);
+
+  return all > 0 ? completed / all : 0;
+};
+
 const mapStateToProps = state => ({
   categories: state.categories,
+  progress: procProgress(state.categories, state.todos),
   popup: state.popup,
   layout: state.layout
 });
