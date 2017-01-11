@@ -23,8 +23,8 @@ class TodoItemEditor extends Component {
       <div className="TodoItemEditor">
         <form onSubmit={this.onSubmit.bind(this)}>
           <div className="TodoItemEditor__buttons">
-            <input type="submit" onClick={this.onSubmit.bind(this)} className="TodoItemEditor__button TodoItemEditor__button&#45;&#45;save" value="Save"/>
-            <button onClick={this.onCancel.bind(this)} className="TodoItemEditor__button TodoItemEditor__button&#45;&#45;cancel">Cancel</button>
+            <input type="submit" onClick={this.onSubmit.bind(this)} className="TodoItemEditor__button TodoItemEditor__button&--save" value="Save"/>
+            <button onClick={this.onCancel.bind(this)} className="TodoItemEditor__button TodoItemEditor__button--cancel">Cancel</button>
           </div>
           <input ref="name" type="text" defaultValue={this.props.item.name} className="TodoItemEditor__name"/>
           <label className="TodoItemEditor__done-tick">
